@@ -44,13 +44,11 @@ function initModernHero() {
 
   hero.prepend(bgWrap);
 
-  // Preload images
   BACKGROUND_IMAGES.forEach(src => {
       const img = new Image();
       img.src = src;
   });
 
-  // SLide logic
   let visibleSlide = slideA;
   let hiddenSlide = slideB;
 
@@ -59,14 +57,11 @@ function initModernHero() {
 
       currentImageIndex = (currentImageIndex + 1) % BACKGROUND_IMAGES.length;
       
-      //  next image into hidden slide
+   
       hiddenSlide.src = BACKGROUND_IMAGES[currentImageIndex];
-      
-      // Crossfade
       hiddenSlide.classList.add('show');
       visibleSlide.classList.remove('show');
       
-      // Swap references
       [visibleSlide, hiddenSlide] = [hiddenSlide, visibleSlide];
   }
 
@@ -80,7 +75,6 @@ function initModernHero() {
       clearInterval(slideInterval);
   }
 
-  // Pp button
   const pauseBtn = document.createElement('button');
   pauseBtn.className = 'hero-pause-btn';
   pauseBtn.setAttribute('aria-label', 'Pause slideshow');
@@ -104,7 +98,6 @@ function initModernHero() {
   
   hero.appendChild(pauseBtn);
 
-  // Start slideshow
   startSlideshow();
 
   // Parallax effect
@@ -115,30 +108,27 @@ function initModernHero() {
       const heroRect = hero.getBoundingClientRect();
       const heroHeight = hero.offsetHeight;
       
-      // opacity fade
+
       const opacity = Math.max(0, Math.min(1, 1 - (scrolled / 300)));
       
-      // Parallax for slow background
       if (bgWrap) {
           const bgY = scrolled * 0.3;
           bgWrap.style.transform = `translateY(${bgY}px)`;
       }
-      
-      // Parallax for content faster
+     
       if (contentWrapper) {
           const contentY = scrolled * 0.2;
           contentWrapper.style.transform = `translateY(${contentY}px)`;
           contentWrapper.style.opacity = opacity;
       }
       
-      // Fade pause 
       if (pauseBtn) {
           pauseBtn.style.opacity = opacity;
       }
   }
   
   window.addEventListener('scroll', handleParallaxScroll, { passive: true });
-  handleParallaxScroll(); // Initial call
+  handleParallaxScroll(); 
 }
 
 
@@ -150,7 +140,6 @@ function initHeaderTransition() {
 
   if (!header || !plate || !spacer || !sentinel) return;
 
-  // spacer height
   function setSpacerHeight() {
       spacer.style.height = `${plate.getBoundingClientRect().height}px`;
   }
@@ -166,7 +155,6 @@ function initHeaderTransition() {
   io.observe(sentinel);
 }
 
-// Mob menu
 
 function initMobileMenu() {
   const mobileMenuBtn = document.getElementById('mobile-menu-btn');
@@ -270,10 +258,8 @@ function initMobileMenu() {
   });
 }
 
-//  projects data for modal 
 let featuredProjectsData = [];
 
-// Get category display name
 if (typeof getCategoryDisplayName === 'undefined') {
   function getCategoryDisplayName(category) {
       const names = {
@@ -285,7 +271,6 @@ if (typeof getCategoryDisplayName === 'undefined') {
   }
 }
 
-// Load Featured Projects from JSON file
 async function loadFeaturedProjects() {
   try {
       const response = await fetch('./projects-data.json');
@@ -295,7 +280,6 @@ async function loadFeaturedProjects() {
           .sort((a, b) => new Date(b.date) - new Date(a.date))
           .slice(0, 6);
 
-      // Store in global variable for modal 
       featuredProjectsData = sortedProjects;
 
       renderFeaturedProjects(sortedProjects);
@@ -304,7 +288,6 @@ async function loadFeaturedProjects() {
   }
 }
 
-// Render the featured projects
 function renderFeaturedProjects(projects) {
   const projectsGrid = document.querySelector('.projects-grid');
   if (!projectsGrid) return;
@@ -336,14 +319,11 @@ function renderFeaturedProjects(projects) {
       </article>
   `).join('');
 
-  // handlers to cards and read more links
   document.querySelectorAll('.project-card').forEach(card => {
       card.addEventListener('click', (e) => {
-          // cnnt open if clicking the read more link
           if (e.target.closest('.read-more-link')) return;
           const projectId = card.dataset.projectId;
           
-          // Check if openProjectModal exists
           if (typeof openProjectModal === 'function') {
               openProjectModal(projectId, featuredProjectsData);
           }
